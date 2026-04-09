@@ -1,4 +1,4 @@
-# Alumni Connect Platform
+# ALUMNINET Platform
 
 Digital Platform for Centralized Alumni Data Management and Engagement
 
@@ -54,7 +54,7 @@ A **full-stack web application** that connects college alumni with current stude
 ## 📁 Project Structure
 
 ```
-Alumni Connect/
+ALUMNINET/
 │
 ├── Frontend/                    # React Application
 │   ├── src/

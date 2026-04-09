@@ -21,6 +21,7 @@ exports.getAllEvents = async (req, res) => {
 exports.registerForEvent = async (req, res) => {
   try {
     const event = await Event.findById(req.params.id);
+    if (!event) return res.status(404).json({ message: 'Event not found' });
     if (!event.registeredUsers.includes(req.user._id)) {
       event.registeredUsers.push(req.user._id);
       await event.save();

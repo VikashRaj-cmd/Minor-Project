@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { login } from '@/services/authService';
 import { AuthContext } from '@/context/AuthContext';
-import { GraduationCap } from 'lucide-react';
+import { GraduationCap, AlertTriangle } from 'lucide-react';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -29,7 +29,7 @@ const Login = () => {
         <div>
           <h1 className="text-5xl font-bold mb-4 flex items-center gap-3">
             <GraduationCap className="w-12 h-12" />
-            Alumni Connect
+            ALUMNINET
           </h1>
           <p className="text-xl opacity-90">Connecting Generations, Building Futures</p>
         </div>
@@ -50,7 +50,7 @@ const Login = () => {
         </div>
 
         <div>
-          <p className="text-sm opacity-75">© 2024 Alumni Connect. All rights reserved.</p>
+          <p className="text-sm opacity-75">© 2024 ALUMNINET. All rights reserved.</p>
         </div>
       </div>
 
@@ -67,7 +67,7 @@ const Login = () => {
 
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 flex items-center">
-              <span className="mr-2">⚠️</span>
+              <AlertTriangle className="mr-2 w-5 h-5" />
               {error}
             </div>
           )}

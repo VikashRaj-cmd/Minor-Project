@@ -8,6 +8,22 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+@layer base {
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: filter 0.3s ease-in-out;
+  }
+  
+  html.dark {
+    filter: invert(1) hue-rotate(180deg);
+  }
+  
+  html.dark img,
+  html.dark video,
+  html.dark .no-invert {
+    filter: invert(1) hue-rotate(180deg);
+  }
 }
+

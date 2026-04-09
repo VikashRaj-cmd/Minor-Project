@@ -21,6 +21,7 @@ exports.getAllInternships = async (req, res) => {
 exports.applyForInternship = async (req, res) => {
   try {
     const internship = await Internship.findById(req.params.id);
+    if (!internship) return res.status(404).json({ message: 'Job not found' });
     if (!internship.applicants.includes(req.user._id)) {
       internship.applicants.push(req.user._id);
       await internship.save();

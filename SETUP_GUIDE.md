@@ -1,4 +1,4 @@
-# 🎓 Alumni Connect - Minor Project Setup Guide
+# 🎓 ALUMNINET - Minor Project Setup Guide
 
 ## ✅ What You Already Have
 - ✅ Node.js installed
@@ -221,7 +221,7 @@ To show events and jobs in your presentation, add sample data:
 ## 📝 Project Structure
 
 ```
-Alumni Connect/
+ALUMNINET/
 ├── Frontend/          # React frontend
 │   ├── src/
 │   │   ├── pages/    # All page components

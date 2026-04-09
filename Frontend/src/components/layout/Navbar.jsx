@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '@/context/AuthContext';
 import { logout } from '@/services/authService';
-import { GraduationCap, LayoutDashboard, Users, CalendarDays, Briefcase, LogOut, Menu, X, User, Settings } from 'lucide-react';
+import { GraduationCap, LayoutDashboard, Users, CalendarDays, Briefcase, LogOut, Menu, X, User, Settings, ChevronDown } from 'lucide-react';
 
 const NAV_ITEMS = [
   { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
@@ -65,7 +65,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
         <Link to="/dashboard" className="flex items-center gap-2">
           <GraduationCap className="h-7 w-7 text-blue-600" />
-          <span className="text-xl font-bold text-gray-900 hidden sm:inline">AlumniConnect</span>
+          <span className="text-xl font-bold text-gray-900 hidden sm:inline">ALUMNINET</span>
         </Link>
 
         {/* Desktop Nav */}
@@ -107,6 +107,7 @@ const Navbar = () => {
                 </div>
               )}
               <span className="hidden sm:inline text-sm font-medium text-gray-900">{user?.name || 'User'}</span>
+              <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${showDropdown ? 'rotate-180' : ''}`} />
             </button>
 
             {/* Dropdown Menu */}

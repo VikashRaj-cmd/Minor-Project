@@ -38,9 +38,21 @@ const internshipSchema = new mongoose.Schema({
   applicants: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }]
 }, { timestamps: true });
 
+const mentorSchema = new mongoose.Schema({
+  name: String,
+  designation: String,
+  company: String,
+  batch: String,
+  expertise: [String],
+  experience: String,
+  sessions: Number,
+  rating: Number,
+}, { timestamps: true });
+
 const User = mongoose.model('User', userSchema);
 const Event = mongoose.model('Event', eventSchema);
 const Internship = mongoose.model('Internship', internshipSchema);
+const Mentor = mongoose.model('Mentor', mentorSchema);
 
 // Sample Data
 const sampleUsers = [
@@ -149,6 +161,49 @@ const sampleEvents = [
   }
 ];
 
+const sampleMentors = [
+  {
+    name: 'Dr. Rajesh Kumar',
+    designation: 'Senior Software Engineer',
+    company: 'Google',
+    batch: '2015',
+    expertise: ['Web Development', 'Cloud Computing', 'System Design'],
+    experience: '8 years',
+    sessions: 45,
+    rating: 4.9
+  },
+  {
+    name: 'Priya Sharma',
+    designation: 'Product Manager',
+    company: 'Microsoft',
+    batch: '2016',
+    expertise: ['Product Management', 'Agile', 'Leadership'],
+    experience: '7 years',
+    sessions: 38,
+    rating: 4.8
+  },
+  {
+    name: 'Amit Patel',
+    designation: 'Data Scientist',
+    company: 'Amazon',
+    batch: '2017',
+    expertise: ['Machine Learning', 'Python', 'Data Analysis'],
+    experience: '6 years',
+    sessions: 52,
+    rating: 4.9
+  },
+  {
+    name: 'Sneha Reddy',
+    designation: 'Full Stack Developer',
+    company: 'Flipkart',
+    batch: '2018',
+    expertise: ['React', 'Node.js', 'MongoDB'],
+    experience: '5 years',
+    sessions: 29,
+    rating: 4.7
+  }
+];
+
 const sampleJobs = [
   {
     title: 'Frontend Developer',
@@ -199,6 +254,7 @@ async function seedDatabase() {
     await User.deleteMany({});
     await Event.deleteMany({});
     await Internship.deleteMany({});
+    await Mentor.deleteMany({});
     console.log('Cleared existing data');
 
     // Hash passwords and create users
@@ -219,6 +275,9 @@ async function seedDatabase() {
     // Create jobs
     const createdJobs = await Internship.insertMany(sampleJobs);
     console.log(`Created ${createdJobs.length} jobs`);
+
+    const createdMentors = await Mentor.insertMany(sampleMentors);
+    console.log(`Created ${createdMentors.length} mentors`);
 
     console.log('\n✅ Database seeded successfully!');
     console.log('\nSample Login Credentials:');

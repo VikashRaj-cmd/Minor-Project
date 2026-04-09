@@ -1,43 +1,35 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '@/context/AuthContext';
 import Navbar from '@/components/layout/Navbar';
 import { Users, Calendar, Briefcase, Handshake, GraduationCap, TrendingUp, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import api from '@/services/api';
 
 const Dashboard = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [counts, setCounts] = useState({ alumniCount: 0, eventsCount: 0, jobsCount: 0, mentorCount: 0 });
+
+  useEffect(() => {
+    api.get('/users/stats').then(({ data }) => setCounts(data)).catch(() => {});
+  }, []);
 
   const stats = [
-    { label: 'Total Alumni', value: '5,234', icon: Users, trend: '↗', trendIcon: TrendingUp, color: 'text-blue-600' },
-    { label: 'Active Events', value: '12', icon: Calendar, trend: '↗', trendIcon: TrendingUp, color: 'text-orange-600' },
-    { label: 'Job Openings', value: '48', icon: Briefcase, trend: '↗', trendIcon: TrendingUp, color: 'text-teal-600' },
-    { label: 'Mentorships', value: '156', icon: Handshake, trend: '↗', trendIcon: TrendingUp, color: 'text-purple-600' }
+    { label: 'Total Alumni', value: counts.alumniCount, icon: Users, color: 'text-blue-600', trend: '+12%' },
+    { label: 'Active Events', value: counts.eventsCount, icon: Calendar, color: 'text-orange-600', trend: '+12%' },
+    { label: 'Job Openings', value: counts.jobsCount, icon: Briefcase, color: 'text-teal-600', trend: '+12%' },
+    { label: 'Mentorships', value: counts.mentorCount, icon: Handshake, color: 'text-purple-600', trend: '+12%' },
   ];
 
-  const quickAccess = [
-    {
-      title: 'Alumni Directory',
-      description: 'Browse alumni profiles',
-      icon: Users,
-      path: '/alumni',
-      color: 'text-blue-600'
-    },
-    {
-      title: 'Upcoming Events',
-      description: 'View & register for events',
-      icon: Calendar,
-      path: '/events',
-      color: 'text-blue-600'
-    },
-    {
-      title: 'Job Portal',
-      description: 'Find job opportunities',
-      icon: Briefcase,
-      path: '/jobs',
-      color: 'text-blue-600'
-    }
+  const quickAccess = user?.role === 'alumni' ? [
+    { title: 'Mentorship Requests', description: 'Guide fellow students', icon: Handshake, path: '/mentorship', color: 'text-purple-600' },
+    { title: 'Job Portal', description: 'Post or find jobs', icon: Briefcase, path: '/jobs', color: 'text-blue-600' },
+    { title: 'Upcoming Events', description: 'View & host events', icon: Calendar, path: '/events', color: 'text-orange-600' },
+  ] : [
+    { title: 'Alumni Directory', description: 'Connect with seniors', icon: Users, path: '/alumni', color: 'text-blue-600' },
+    { title: 'Find a Mentor', description: 'Get career guidance', icon: Handshake, path: '/mentorship', color: 'text-purple-600' },
+    { title: 'Job Portal', description: 'Apply for internships', icon: Briefcase, path: '/jobs', color: 'text-green-600' }
   ];
 
   const recentActivity = [
@@ -85,13 +77,17 @@ const Dashboard = () => {
         <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {stats.map((stat, index) => (
             <motion.div key={index} variants={item}>
-              <div className="bg-white rounded-xl p-5 shadow-sm hover:shadow-lg transition-shadow border border-gray-100">
-                <div className="flex items-center justify-between mb-3">
-                  <stat.icon className={`h-5 w-5 ${stat.color}`} />
-                  <stat.trendIcon className="h-4 w-4 text-green-500" />
+              <div className="bg-white rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-200 group">
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`p-3 rounded-xl ${stat.color.replace('text', 'bg').replace('600', '50')} group-hover:scale-110 transition-transform`}>
+                    <stat.icon className={`h-6 w-6 ${stat.color}`} />
+                  </div>
+                  <div className="flex items-center text-green-600 bg-green-50 px-2.5 py-1 rounded-full text-xs font-semibold">
+                    <TrendingUp className="h-3 w-3 mr-1" /> {stat.trend}
+                  </div>
                 </div>
-                <div className="text-2xl font-bold text-gray-800">{stat.value}</div>
-                <div className="text-sm text-gray-600">{stat.label}</div>
+                <div className="text-3xl font-bold text-gray-900 mb-1">{stat.value}</div>
+                <div className="text-sm font-medium text-gray-500">{stat.label}</div>
               </div>
             </motion.div>
           ))}
@@ -124,13 +120,18 @@ const Dashboard = () => {
           <div>
             <h2 className="text-xl font-semibold text-gray-800 mb-4">Recent Activity</h2>
             <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
-              <div className="space-y-4">
+              <div className="space-y-5">
                 {recentActivity.map((activity, index) => (
-                  <div key={index} className="flex gap-3">
-                    <div className="mt-1.5 h-2 w-2 rounded-full bg-blue-600 flex-shrink-0"></div>
-                    <div>
-                      <p className="text-sm text-gray-800">{activity.text}</p>
-                      <p className="text-xs text-gray-500">{activity.time}</p>
+                  <div key={index} className="relative flex gap-4 items-start">
+                    {index !== recentActivity.length - 1 && (
+                      <div className="absolute left-4 top-8 bottom-[-20px] w-0.5 bg-gray-100"></div>
+                    )}
+                    <div className="relative z-10 w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0 border border-blue-100">
+                      <div className="h-2.5 w-2.5 rounded-full bg-blue-600"></div>
+                    </div>
+                    <div className="pt-1.5">
+                      <p className="text-sm font-medium text-gray-800">{activity.text}</p>
+                      <p className="text-xs text-gray-500 mt-0.5">{activity.time}</p>
                     </div>
                   </div>
                 ))}

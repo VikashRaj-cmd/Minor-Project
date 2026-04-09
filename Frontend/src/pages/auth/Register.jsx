@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { register } from '@/services/authService';
 import { AuthContext } from '@/context/AuthContext';
-import { GraduationCap } from 'lucide-react';
+import { GraduationCap, Handshake, Rocket, AlertTriangle } from 'lucide-react';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -30,16 +30,16 @@ const Register = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    
     if (name === 'course') {
       setFormData({ ...formData, course: value, department: '' });
+    } else {
+      setFormData({ ...formData, [name]: value });
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       return;
@@ -67,28 +67,28 @@ const Register = () => {
         <div>
           <h1 className="text-5xl font-bold mb-4 flex items-center gap-3">
             <GraduationCap className="w-12 h-12" />
-            Alumni Connect
+            ALUMNINET
           </h1>
           <p className="text-xl opacity-90">Join Our Growing Community</p>
         </div>
-        
+
         <div className="space-y-6">
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-            <h3 className="text-2xl font-bold mb-2">🎓 Easy Registration</h3>
+            <h3 className="text-2xl font-bold mb-2 flex items-center gap-2"><GraduationCap className="w-6 h-6" /> Easy Registration</h3>
             <p className="opacity-90">Quick signup process to get started</p>
           </div>
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-            <h3 className="text-2xl font-bold mb-2">🤝 Network & Connect</h3>
+            <h3 className="text-2xl font-bold mb-2 flex items-center gap-2"><Handshake className="w-6 h-6" /> Network & Connect</h3>
             <p className="opacity-90">Connect with alumni worldwide</p>
           </div>
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6">
-            <h3 className="text-2xl font-bold mb-2">🚀 Career Growth</h3>
+            <h3 className="text-2xl font-bold mb-2 flex items-center gap-2"><Rocket className="w-6 h-6" /> Career Growth</h3>
             <p className="opacity-90">Access jobs, events & mentorship</p>
           </div>
         </div>
 
         <div>
-          <p className="text-sm opacity-75">© 2024 Alumni Connect. All rights reserved.</p>
+          <p className="text-sm opacity-75">© 2024 ALUMNINET. All rights reserved.</p>
         </div>
       </div>
 
@@ -99,13 +99,13 @@ const Register = () => {
             <div className="inline-block bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-3 rounded-full mb-3">
               <GraduationCap className="w-7 h-7" />
             </div>
-            <h2 className="text-2xl font-bold text-gray-800 mb-1">Join Alumni Connect</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-1">Join ALUMNINET</h2>
             <p className="text-gray-600">Create an account to access the alumni network</p>
           </div>
 
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2.5 rounded-lg mb-4 flex items-center">
-              <span className="mr-2">⚠️</span>
+              <AlertTriangle className="mr-2 w-5 h-5" />
               {error}
             </div>
           )}
@@ -174,7 +174,7 @@ const Register = () => {
                   onChange={handleChange}
                   className="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                 >
-                  <option value="student">Current Student</option>
+                  <option value="student">Student</option>
                   <option value="alumni">Alumni</option>
                 </select>
               </div>

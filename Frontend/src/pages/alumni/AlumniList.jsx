@@ -1,22 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getAllAlumni } from '@/services/userService';
 import Navbar from '@/components/layout/Navbar';
+import { AuthContext } from '@/context/AuthContext';
 import { Building, GraduationCap, Linkedin, Mail, Search } from 'lucide-react';
 
 const AlumniList = () => {
   const [alumni, setAlumni] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    
     fetchAlumni();
   }, []);
 
   const fetchAlumni = async () => {
     try {
+      setIsLoading(true);
       const data = await getAllAlumni();
       setAlumni(data);
     } catch (error) {
       console.error('Error fetching alumni:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -49,7 +58,20 @@ const AlumniList = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {isLoading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          </div>
+        ) : filteredAlumni.length === 0 ? (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+            <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+              <GraduationCap className="w-10 h-10 text-blue-600" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-800 mb-2">No Alumni Found</h3>
+            <p className="text-gray-500 max-w-sm mx-auto">We couldn't find any alumni matching your search criteria. Try a different search term.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredAlumni.map((alum) => (
             <div key={alum._id} className="bg-white rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 group">
               <div className="p-6">
@@ -101,7 +123,8 @@ const AlumniList = () => {
               </div>
             </div>
           ))}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

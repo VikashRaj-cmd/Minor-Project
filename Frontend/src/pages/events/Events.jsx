@@ -5,6 +5,7 @@ import { PartyPopper, Calendar, MapPin, Users, Sparkles } from 'lucide-react';
 
 const Events = () => {
   const [events, setEvents] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchEvents();
@@ -12,10 +13,13 @@ const Events = () => {
 
   const fetchEvents = async () => {
     try {
+      setIsLoading(true);
       const data = await getAllEvents();
       setEvents(data);
     } catch (error) {
       console.error('Error fetching events:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -44,7 +48,20 @@ const Events = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {isLoading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+          </div>
+        ) : events.length === 0 ? (
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-12 text-center">
+            <div className="w-20 h-20 bg-orange-50 rounded-full flex items-center justify-center mx-auto mb-4">
+              <Calendar className="w-10 h-10 text-orange-500" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-800 mb-2">No Upcoming Events</h3>
+            <p className="text-gray-500 max-w-sm mx-auto">There are currently no events scheduled. Check back later for networking opportunities!</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {events.map((event) => (
             <div key={event._id} className="bg-white rounded-xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100">
               <div className="bg-gradient-to-r from-green-500 to-emerald-500 p-6 text-white relative overflow-hidden">
@@ -105,7 +122,8 @@ const Events = () => {
               </div>
             </div>
           ))}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
